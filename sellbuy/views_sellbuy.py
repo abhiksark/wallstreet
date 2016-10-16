@@ -27,13 +27,13 @@ def current_priceAjax(request):
 	data=Share.objects.all().exclude(describ='All')
 	global userstr
 	userstr=str(request.user)
-	popup='<script language="javascript" type="text/javascript">function popitup(url) {var leftPosition, topPosition;leftPosition = (window.screen.width / 2) - ((800 / 2) + 10);topPosition = (window.screen.height / 2) - ((600 / 2) + 50);newwindow=window.open(url,\'name\',"status=no,height=600,width=800,resizable=yes,left="+ leftPosition + ",top=" + topPosition + ",screenX=" + leftPosition + ",screenY="+ topPosition + ",toolbar=no,menubar=no,scrollbars=no,directories=no");if (window.focus) {newwindow.focus()}return false;}</script>'	
-	
+	popup='<script language="javascript" type="text/javascript">function popitup(url) {var leftPosition, topPosition;leftPosition = (window.screen.width / 2) - ((800 / 2) + 10);topPosition = (window.screen.height / 2) - ((600 / 2) + 50);newwindow=window.open(url,\'name\',"status=no,height=600,width=800,resizable=yes,left="+ leftPosition + ",top=" + topPosition + ",screenX=" + leftPosition + ",screenY="+ topPosition + ",toolbar=no,menubar=no,scrollbars=no,directories=no");if (window.focus) {newwindow.focus()}return false;}</script>'
+
 	strdata='<table>'
 	global i
-	print "i=================",i
+	#print "i=================",i
 	if i ==-2:
-		print "timer_started"
+		#print "timer_started"
 		i=30
 		p1=mp.Process(name='fun_call',target=fun_call)
 		p1.start()
@@ -44,17 +44,17 @@ def current_priceAjax(request):
 		qty = ShareDetail.objects.values_list(str(o.name)).filter(username=request.user)
 		var_qty = qty[0][0]
 		strdata+='<tr><td><a href='+'\'./share_graph/'+str(o.name)+'\' onclick=\"return popitup(\'./share_graph/'+str(o.name)+'\')\">'+str(o.name)+'</a>'+'</td><td>'+str(o.currentprice)+'</td><td width=25 align=\'center\'>'+str(var_qty)+'</td></tr>'
-	strdata+='</table>'	
-	
-	#strdata+='</table></marquee>'	
+	strdata+='</table>'
+
+	#strdata+='</table></marquee>'
 	return HttpResponse(strdata)
 
 @login_required
 def current_news(request):
 
 	data=News.objects.all()
-	
-	
+
+
 	userstr=str(request.user)
 	strnews='<marquee onmouseover="this.stop()" onmouseout="this.start()" direction="up" height =40 scrolldelay=300><table>'
 	#xyz=0
@@ -63,9 +63,9 @@ def current_news(request):
 		#x = share.name
 		#xyz=xyz+1
 		strnews+='<tr><td>'+ ''+ str(o.news)+'</td></tr>'
-	strnews+='</table></marquee>'	
-	
-	#strdata+='</table></marquee>'	
+	strnews+='</table></marquee>'
+
+	#strdata+='</table></marquee>'
 	return HttpResponse(strnews)
 
 def current_queries(request):
@@ -79,10 +79,10 @@ def current_queries(request):
 
 
 def timer_update(request):
-	
+
 	time_data=Timer.objects.all().filter(name='timerUpdate')
 	time =[(o.time)for o in time_data]
-	#print "time shown"+str(time)
+	##print "time shown"+str(time)
 	return HttpResponse(time)
 
 countMinute = 0.0
@@ -96,19 +96,19 @@ def UpdatePortfolio():
 	f = open ( 'portfolio_dim_c.txt')
 	for col in f:
 		Matrixc=int(col)
-	print "updated"
+	#print "updated"
 	user = ShareDetail.objects.all()
 	shares = Share.objects.exclude(name='none').all()
-	print "MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMatrixc="+str(Matrixc)
-	
+	#print "MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMatrixc="+str(Matrixc)
+
 	for o in user:
 		shareworth = float(0)
 		for sh in shares:
 			shareworth += float(getattr(o,str(sh.name))) * float(sh.currentprice)
 		UserNetWorth = float(o.money_in_hand) + shareworth
 		for x in range(0,Matrixr):
-			print "matrixr loop started"
-			print Matrix[x][0],o.username
+			#print "matrixr loop started"
+			#print Matrix[x][0],o.username
 			if(str(Matrix[x][0])==o.username):
 				Matrix[x][Matrixc]=UserNetWorth
 	Matrixc+=1
@@ -124,7 +124,7 @@ def UpdatePortfolio():
 def printit(iter_count):
 	iter_count=int(iter_count/15)
 	#global userstr
-	#print "process="+str(multiprocessing.current_process().name)
+	##print "process="+str(multiprocessing.current_process().name)
 	global countMinute
 	modelt = Timer.objects.get(name='timerUpdate')
 	timer=modelt.time
@@ -136,7 +136,7 @@ def printit(iter_count):
 			#################################  to update portfolio
 			UpdatePortfolio()
 			countMinute = 0
-	print timer
+	#print timer
 	setattr(modelt,'time',timer)
 	modelt.save()
 	if timer==5:
@@ -150,26 +150,27 @@ def printit(iter_count):
 			cp=o.currentprice
 			if(int(cp<2)):
 				cp=5
-			#print "sh index",share_index," sh name",o.name
-			#print iter_count
-			n = SPW(share_index,cp,iter_count)
-			
+			##print "sh index",share_index," sh name",o.name
+			##print iter_count
+			n = SPW(share_index,float(cp)*float(1.1),iter_count)
+			#n=n*1.09
+
 			c=1.01#afterwards will be synce with news also
 			queries_total=float(o.queries_total)
 			if(queries_total)<1:
 				queries_total=1;
-			new_price=float(n*(1+(1/2)*float((o.queries/queries_total))))
+			new_price=float(n*(1+(1/5)*float((o.queries/queries_total))))
 			if(new_price<2):
 				new_price=5
-			print "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",cp ,n,new_price
+			#print "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",cp ,n,new_price
 			setattr(o,'currentprice',new_price)
 			setattr(o,'queries',0)
-			setattr(o,'queries_total',0)	
+			setattr(o,'queries_total',0)
 			o.save()
 			currentshare=apps.get_model('portfolio',o.name)
-			currentshare.objects.create(x=iter_count,y=new_price)					
+			currentshare.objects.create(x=iter_count,y=new_price)
 			share_index+=1
-		#	print o.name
+		#	#print o.name
 		#share_querylist.save()
 		#######################################################################################
 	#threading.Timer(1.0, printit).start()
@@ -177,7 +178,7 @@ def printit(iter_count):
 #apsched.start()
 #apsched.add_job(printit, 'interval', seconds=1)
 import time
-	
+
 def fun_call():
 	from django.db import connection
 	connection.close()
@@ -185,6 +186,9 @@ def fun_call():
 		modeliter = Timer.objects.get(name='iter')
 		iter_count=modeliter.time
 		printit(iter_count)
+		print "iter=",iter_count
+		if(iter_count>40000):
+			iter_count=1
 		setattr(modeliter,'time',iter_count+1)
 		modeliter.save()
 		time.sleep(1)
@@ -199,7 +203,7 @@ def dynamic2(request):
 	f = open ( 'portfolio_dim_c.txt')
 	for col in f:
 		Matrixc=int(col)
-	
+
 	#global Matrix,Matrixr,Matrixc
 	data='<table>'
 	for row in range (0,Matrixr):
@@ -225,21 +229,21 @@ def sellbuyhome(request):
 			qty1=int(0)
 		user_query=ShareDetail.objects.get(username=request.user)
 		money=user_query.money_in_hand
-			
+
 		share_query=Share.objects.get(name=name_return)
 		share_price=share_query.currentprice
 		qty_share_query=share_query.queries
 		if qty1>=int(0):
 			if request.POST.get("buy")=='BUY':
-			
-			
+
+
 				if(qty1*share_price>money):
 					error='Money is less.Only '+str(int(money/share_price))+' shares can be bought'
 				else:
 					var_qty2 = ShareDetail.objects.values_list(name_return).filter(username=request.user)
 					qty2 = var_qty2[0][0]
 					setattr(user_query,name_return,qty1+qty2)
-				
+
 					setattr(user_query,'money_in_hand',money-(share_price*qty1))
 					user_query.save()
 					queries_total=share_query.queries_total
@@ -247,7 +251,7 @@ def sellbuyhome(request):
 					setattr(share_query,'queries_total',queries_total)
 					setattr(share_query,'queries',qty1+qty_share_query)
 					share_query.save()
-					#print "user money"+str(user_query.money_in_hand)
+					##print "user money"+str(user_query.money_in_hand)
 					error='success'
 
 			if request.POST.get("sell")=='SELL':
@@ -268,9 +272,9 @@ def sellbuyhome(request):
 					error='you dont have that many shares'
 		else:
 			error='we take our event rather seriously'
-	print request.user
+	#print request.user
 	user_query=ShareDetail.objects.get(username=request.user)
-	print "line crossed"
+	#print "line crossed"
 	form = ListForm(None, SDesc=Desc, Sname = name_return,UserName=request.user)
 	variables = RequestContext(request,{
 		'form':form,

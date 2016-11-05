@@ -93,16 +93,18 @@ django.contrib.auth.LOGIN_URL = '/login'
 #     }
 # }
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'wallstreet2',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': '127.0.0.1',   # Or an IP Address that your DB is hosted on
+        'NAME': 'wallstreet$python_new',
+        'USER': 'wallstreet',
+        'PASSWORD': 'adityaagr',
+        'HOST': 'wallstreet.mysql.pythonanywhere-services.com',   # Or an IP Address that your DB is hosted on
         'PORT': '3306',
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators

@@ -152,7 +152,12 @@ def printit(iter_count):
 				cp=5
 			##print "sh index",share_index," sh name",o.name
 			##print iter_count
-			n = SPW(share_index,float(cp)*float(1.1),iter_count)
+			###################################################################
+			##################################333n = SPW(share_index,float(cp)*float(1.1),iter_count)
+			#############################################################3
+			from random import randint
+			n=randint(n*85/100,n*112/100)
+			
 			#n=n*1.09
 
 			c=1.01#afterwards will be synce with news also

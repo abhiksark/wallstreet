@@ -97,7 +97,7 @@ django.contrib.auth.LOGIN_URL = '/login'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'wallstreet$python_new',
+        'NAME': 'wallstreet$newtest1',
         'USER': 'wallstreet',
         'PASSWORD': 'adityaagr',
         'HOST': 'wallstreet.mysql.pythonanywhere-services.com',   # Or an IP Address that your DB is hosted on

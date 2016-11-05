@@ -46,4 +46,8 @@ urlpatterns = [
     url(r'^leaderboard/$',leaderboard),
     url(r'^leaderboard/get_leaderboard/$',get_leaderboard),
     #url(r'^checkdb/$',views_portfolio.checkdb, name = 'checkdb'),
-    ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    ]
+from django.conf import settings
+from django.conf.urls.static import static
+urlpatterns+=static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+urlpatterns+=static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

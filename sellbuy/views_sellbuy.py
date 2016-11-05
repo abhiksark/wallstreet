@@ -156,7 +156,7 @@ def printit(iter_count):
 			##################################333n = SPW(share_index,float(cp)*float(1.1),iter_count)
 			#############################################################3
 			from random import randint
-			n=randint(n*85/100,n*112/100)
+			n=randint(int(cp*85/100),int(cp*112/100))
 			
 			#n=n*1.09
 
